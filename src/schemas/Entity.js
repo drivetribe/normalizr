@@ -53,14 +53,21 @@ export default class EntitySchema {
 
   denormalize(entityOrId, unvisit, entities) {
     const entity = typeof entityOrId === 'object' ? entityOrId : entities[this.key][entityOrId];
+    if (!entity) {
+      return null;
+    }
     const entityCopy = { ...entity };
-    Object.keys(this.schema).forEach((key) => {
+    for (const key in this.schema) {
       if (entityCopy.hasOwnProperty(key)) {
         const schema = this.schema[key];
-        entityCopy[key] = unvisit(entityCopy[key], schema, entities);
+        const val = unvisit(entityCopy[key], schema, entities);
+        if (val) {
+          entityCopy[key] = val;
+        } else {
+          return null;
+        }
       }
-    });
-
+    }
     return entityCopy;
   }
 }
