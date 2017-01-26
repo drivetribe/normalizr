@@ -56,7 +56,7 @@ describe(`${schema.Object.name} denormalization`, () => {
     expect(denormalize(2, userSchema, entities)).toBeNull();
   });
 
-  it('returns empty object when a nested entity is not found', () => {
+  it('returns null when a nested entity is not found', () => {
     const tribeSchema = new schema.Entity('tribe');
     const userSchema = new schema.Entity('user', {
       tribe: tribeSchema
