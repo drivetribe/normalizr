@@ -23,7 +23,9 @@ export const normalize = (schema, input, parent, key, visit, addEntity) => {
 
 export const denormalize = (schema, input, unvisit, entities) => {
   schema = validateSchema(schema);
-  return input.map((entityOrId) => unvisit(entityOrId, schema, entities));
+  return input
+    .map((entityOrId) => unvisit(entityOrId, schema, entities))
+    .filter(Boolean);
 };
 
 export default class ArraySchema extends PolymorphicSchema {
@@ -35,6 +37,8 @@ export default class ArraySchema extends PolymorphicSchema {
   }
 
   denormalize(input, unvisit, entities) {
-    return input.map((value) => this.denormalizeValue(value, unvisit, entities));
+    return input
+      .map((value) => this.denormalizeValue(value, unvisit, entities))
+      .filter(Boolean);
   }
 }
