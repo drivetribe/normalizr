@@ -16,21 +16,17 @@ export const denormalize = (schema, input, unvisit, entities) => {
   if (!input) {
     return null;
   }
-  let failure = false;
   const object = { ...input };
-  Object.keys(schema).forEach((key) => {
+  for (const key in schema) {
     const localSchema = schema[key];
     if (object[key]) {
       const val = unvisit(object[key], localSchema, entities);
       if (val) {
         object[key] = val;
       } else {
-        failure = true;
+        return null;
       }
     }
-  });
-  if (failure) {
-    return null;
   }
   return object;
 };

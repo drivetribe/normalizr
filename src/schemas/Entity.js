@@ -56,21 +56,17 @@ export default class EntitySchema {
     if (!entity) {
       return null;
     }
-    let failure = false;
     const entityCopy = { ...entity };
-    Object.keys(this.schema).forEach((key) => {
+    for (const key in this.schema) {
       if (entityCopy.hasOwnProperty(key)) {
         const schema = this.schema[key];
         const val = unvisit(entityCopy[key], schema, entities);
         if (val) {
           entityCopy[key] = val;
         } else {
-          failure = true;
+          return null;
         }
       }
-    });
-    if (failure) {
-      return null;
     }
     return entityCopy;
   }
